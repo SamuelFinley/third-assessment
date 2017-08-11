@@ -1,0 +1,26 @@
+<div class="btn-group" style="margin-left: 78vw">
+  <a class="btn btn-primary">Logged In: {{feedCtrl.feedService.user}}</a>
+  <a class="btn btn-primary dropdown-toggle" aria-expanded="false" ui-sref="feedState" data-toggle="dropdown"><span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a ui-sref="profile({username: feedCtrl.feedService.user})" >Go to My Profile</a></li>
+    <li><a ui-sref="userFeed">Show followers</a></li>
+    <li><a ui-sref="userFeed">Show people following</a></li>
+    <li class="divider"></li>
+    <li><a ng-click="feedCtrl.feedService.logOut()">Log out</a></li>
+  </ul>
+  <ui-view></ui-view>
+</div>
+<div class="tweetContainer" ng-repeat= "tweet in feedCtrl.feedService.feed">
+ <a class="btn btn-primary" ui-sref= "profile(tweet.author)"> {{tweet.author.username}}</a>
+ <div style = "margin-left: 10vw"> {{tweet.content}} </div>
+ <div> {{tweet.posted | date:'medium'}} </div>
+ <input type="text" class="newTweet" id="inputTweet" placeholder="Reply?" ng-model='feedCtrl.newTweet.content'>
+ <div class="btn-group btn-group-justified">
+  <a class="btn btn-default" ng-click="feedCtrl.tweetService.likeTweet(tweet.id)">like</a>
+  <a class="btn btn-default" ng-click="feedCtrl.tweetService.replyTweet(feedCtrl.newTweet, tweet.id)">reply</a>
+  <a class="btn btn-default"
+    ng-click="feedCtrl.tweetService.repostTweet(tweet.id)">repost </a>
+
+
+</div>
+ </div>

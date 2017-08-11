@@ -1,0 +1,141 @@
+<div class="overcontainer" ng-style='profileCtrl.profileService.viewUpdate'>
+  <div class="updateContainer">
+  <form class="login-form">
+    <fieldset>
+      <legend>Update Profile Information</legend>
+      <div class="login-form-group">
+        <label for="inputFirstname" class="login-input-col1 control-label" ng-style="{'text-indent': '-50px'}">Firstname</label>
+        <div class="login-input-col2">
+          <input type="text" class="login-form-control" id="inputFirstname" placeholder="Firstname" ng-model="usering.profile.firstName">
+        </div>
+      </div>
+      <div class="login-form-group">
+        <label for="inputLastname" class="login-input-col1 control-label" ng-style="{'text-indent': '-50px'}">Lastname</label>
+        <div class="login-input-col2">
+          <input type="text" class="login-form-control" id="inputLastname" placeholder="Lastname" ng-model="usering.profile.lastName">
+        </div>
+      </div>
+      <div class="login-form-group">
+        <label for="inputPhone" class="login-input-col1 control-label" ng-style="{'text-indent': '-50px'}">Phone Number</label>
+        <div class="login-input-col2">
+          <input type="text" class="login-form-control" id="inputPhone" placeholder="Phone number" ng-model="usering.profile.phone">
+        </div>
+      </div>
+      <div class="login-form-group">
+        <div class="login-input-col2">
+          <button type="submit" class="login-btn btn-primary" ng-click='profileCtrl.profileService.updateProfile(usering)' >Submit</button>
+          <button type="reset" class="login-btn btn-default" ng-click="profileCtrl.profileService.viewUpdate = {visibility: 'hidden'}">Cancel</button>
+        </div>
+      </div>
+    </div>
+    </fieldset>
+  </form>
+</div>
+<div class="profileComponent" ng-init ="profileCtrl.profileService.checkFollowing()">
+    <div class = "privateInfo" style="background-color:rgba(0,0,0,0)">
+      <div class = "photo">
+        <img src= "image/defaultPic.jpg" alt="default picture" style="width:225px;height:225px;">
+      </div>
+      <div class="profileInfo">
+        <div class="name" >   {{profileCtrl.profileService.userProfile.profile.firstName}}
+        {{profileCtrl.profileService.userProfile.profile.lastName}} </div>
+        <div class="nickName" > @{{profileCtrl.profileService.userProfile.username}}</div>
+        <div class="contactInfo">
+             <label class="contacts">Contact Information: </label>
+             <div class="userEmail"> Email: {{profileCtrl.profileService.userProfile.profile.email}}
+             </div>
+             <div class="userPhone">Phone Number: {{profileCtrl.profileService.userProfile.profile.phone}}
+             </div>
+             <div style="margin-top: 1vh">
+                 <button class="btn btn-primary" data-toggle="button"
+                    ng-click="profileCtrl.profileService.follow()">
+                    {{profileCtrl.profileService.followedOrNah}}</button>
+               </div>
+               <div style="margin-top: 1vh">
+                   <button class="btn btn-primary"
+                      ng-click="profileCtrl.profileService.getLikes()">
+                      {{profileCtrl.profileService.likedTweetsButton}}</button>
+                 </div>
+               </div>
+     </div>
+  </div>
+ <div class = "subpageComponent" style="background-color:rgba(0,0,0,0)">
+   <user-tweet-component></user-tweet-component>
+    <ui-view></ui-view>
+    <div class="profileContain">
+    <div class = "profileTweets">
+   <div ng-init = "limit = 10">
+     <div class="profileSubpageContainer" ng-repeat= "tweet in profileCtrl.profileService.userTweets | limitTo: limit as results"
+                                          ng-show = "profileCtrl.profileService.checkShow('user')">
+    <div class = "time">{{tweet.posted | date:'medium'}}</div>
+                  <div class = "message">{{tweet.content}}{{tweet.repostOf.author.username}}</div>
+                  <input type="text" class="newTweet" id="inputTweet" placeholder="Reply?" ng-model='profileCtrl.newTweet.content'>
+                  <div class="btn-group btn-group-justified">
+                   <a class="btn btn-default" ng-click="profileCtrl.tweetService.likeTweet(tweet.id)">like</a>
+                   <a class="btn btn-default" ng-click="profileCtrl.tweetService.replyTweet(profileCtrl.newTweet, tweet.id)">reply</a>
+                   <a class="btn btn-default" ng-click="profileCtrl.tweetService.repostTweet(tweet.id)">repost</a>
+                 </div>
+                </div>
+    <div class="profileLikedTweetsContainer" ng-repeat= "tweet in profileCtrl.profileService.likedTweets"
+                                             ng-show = "profileCtrl.profileService.checkShow('liked')">
+            <div class = "time">{{tweet.posted | date:'medium'}}</div>
+            <div class = "message">{{tweet.author.username}}: {{tweet.content}}{{tweet.repostOf.author.username}}</div>
+            <input type="text" class="newTweet" id="inputTweet" placeholder="Reply?" ng-model='profileCtrl.newTweet.content'>
+            <div class="btn-group btn-group-justified">
+                 <a class="btn btn-default" ng-click="profileCtrl.tweetService.likeTweet(tweet.id)">like</a>
+                 <a class="btn btn-default" ng-click="profileCtrl.tweetService.replyTweet(profileCtrl.newTweet, tweet.id)">reply</a>
+                 <a class="btn btn-default" ng-click="profileCtrl.tweetService.repostTweet(tweet.id)">repost</a>
+            </div>
+      </div>
+      <div class="profileLikedTweetsContainer" ng-repeat= "tweet in profileCtrl.profileService.mentions | limitTo: limit as results"
+                                           ng-show = "profileCtrl.profileService.checkShow('mentions')">
+     <div class = "time">{{tweet.posted | date:'medium'}}</div>
+                   <div class = "message">{{tweet.content}}{{tweet.repostOf.author.username}}</div>
+                   <input type="text" class="newTweet" id="inputTweet" placeholder="Reply?" ng-model='profileCtrl.newTweet.content'>
+                   <div class="btn-group btn-group-justified">
+                    <a class="btn btn-default" ng-click="profileCtrl.tweetService.likeTweet(tweet.id)">like</a>
+                    <a class="btn btn-default" ng-click="profileCtrl.tweetService.replyTweet(profileCtrl.newTweet, tweet.id)">reply</a>
+                    <a class="btn btn-default" ng-click="profileCtrl.tweetService.repostTweet(tweet.id)">repost</a>
+                  </div>
+                 </div>
+        </div>
+        <button class = "showMorebutton" ng-hide="results.length === profileCtrl.profileService.userTweets.length"
+        ng-click="limit = limit +2">show more tweets...</button>
+        </div>
+        <div class = "followMe">
+          <div class = "followImage">
+         <img src= "image/followMe.gif" alt="default picture" style="width:214px;height:150px;">
+          </div>
+          <div class="followingContainer">
+          <div class="followHeading"> Following </div>
+            <div ng-repeat= "following in profileCtrl.profileService.userFollowing">
+              <a ui-sref="profile ({username: following.username})">{{following.profile.firstName}} {{following.profile.lastName}} @{{following.username}}</a>
+          </div>
+               </div>
+           <div class="followersContainer">
+           <div class="followHeading"> Followers </div>
+            <div ng-repeat= "follower in profileCtrl.profileService.userFollowers">
+              <a ui-sref="profile ({username: follower.username})">
+            {{follower.profile.firstName}} {{follower.profile.lastName}} @{{follower.username}}</a>
+          </div>
+           </div>
+           </div>
+             </div>
+   </div>
+    <div class = "myLogButton" style="background-color:rgba(0,0,0,0)">
+      <div class="btn-group" >
+        <a class="btn btn-primary">Logged In: {{profileCtrl.profileService.username}}</a>
+        <a class="btn btn-primary dropdown-toggle" aria-expanded="false" ui-sref="feedState" data-toggle="dropdown"><span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a ui-sref="userFeed ({username: profileCtrl.profileService.userProfile.username})">Feed Page</a></li>
+          <li><a ui-sref="start ({username: profileCtrl.profileService.userProfile.username})">Start Page</a></li>
+          <li><a ng-click="profileCtrl.profileService.goToMyProfile()">Go to my profile</a></li>
+          <li><a ng-click="profileCtrl.profileService.viewUpdate = {visibility:'visible'}"
+                 ng-show = "profileCtrl.profileService.username === profileCtrl.profileService.followName">
+                 Edit my profile</a></li>
+          <li class="divider"></li>
+          <li><a ng-click="profileCtrl.profileService.logOut()">Log out</a></li>
+        </ul>
+    </div>
+</div>
+</div>

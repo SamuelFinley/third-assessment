@@ -1,0 +1,12 @@
+
+<div class="tweetContainer" ng-repeat= "tweet in $ctrl.tweets">
+ <div> {{tweet.author.username}} </div>
+ <div style = "margin-left: 10vw"> {{tweet.content}} </div>
+ <div> {{tweet.posted | date:'medium'}} </div>
+ <input type="text" class="newTweet" id="inputTweet" placeholder="Reply?" ng-model='$ctrl.newTweet.content'>
+ <div class="btn-group btn-group-justified">
+  <a class="btn btn-default" ng-click="$ctrl.likeTweet(tweet.id)">like</a>
+  <a class="btn btn-default" ng-click="$ctrl.replyTweet($ctrl.newTweet, tweet.id)">reply</a>
+  <a class="btn btn-default" ng-click="$ctrl.repostTweet(tweet.id)">repost</a>
+</div>
+ </div>

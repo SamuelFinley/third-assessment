@@ -1,0 +1,33 @@
+<div>
+  <div id="heading" class="headline">
+    Let's Tweet!   <img src= "/image/bird.png" alt="default picture" style="width:180px;height:180px;">
+  </div>
+  <div class = "letsTweet" ng-style="{'background-color': 'transparent'}">
+    <div class="beLoggedIn">
+      <div class="logged" ng-style="startCtrl.startPageService.loggedInButton()">
+          <a ui-sref="userFeed ({username: startCtrl.profileService.userProfile.username})">Feed Page |</a>
+          <a ui-sref="profile ({username: startCtrl.profileService.userProfile.username})">My profile |</a>
+          <a ng-click="startCtrl.startPageService.logOut()">Log out</a>
+
+        <a ui-sref="registration" ng-style="startCtrl.startPageService.changePage()">Sign Up |</a>
+        <a ui-sref="login" ng-style="startCtrl.startPageService.changePage()">Log In</a>
+        <ui-view></ui-view>
+      </div>
+    </div>
+    <div ng-init = "limit = 10">
+      <div class="startTweetContainer" ng-repeat= "tweet in startCtrl.startPageService.tweets | limitTo: limit as results">
+        <div> {{tweet.posted | date:'medium'}} </div>
+        <a class="goToUser" ui-sref= "profile(tweet.author)"> @{{tweet.author.username}} >> </a>
+        <div class="tweetContent">{{tweet.content}}</div>
+        <input type="text" class="newTweet" id="inputTweet" placeholder="Reply?" ng-model='startCtrl.newTweet.content'>
+        <div class="btn-group btn-group-justified">
+          <a class="btn btn-default" ng-click="startCtrl.tweetService.likeTweet(tweet.id)">like</a>
+          <a class="btn btn-default" ng-click="startCtrl.tweetService.replyTweet(startCtrl.newTweet, tweet.id)">reply</a>
+          <a class="btn btn-default" ng-click="startCtrl.tweetService.repostTweet(tweet.id)">repost</a>
+        </div>
+     </div>
+     <button class = "showMorebutton" ng-hide="results.length === startCtrl.startPageService.tweets.length"
+        ng-click="limit = limit +5">show more tweets...</button>
+    </div>
+  </div>
+</div>
